@@ -12,7 +12,6 @@ import Plugin from '@ckeditor/ckeditor5-core/src/plugin';
 import ClipboardObserver from './clipboardobserver';
 
 import plainTextToHtml from './utils/plaintexttohtml';
-import normalizeClipboardHtml from './utils/normalizeclipboarddata';
 import viewToPlainText from './utils/viewtoplaintext.js';
 
 import HtmlDataProcessor from '@ckeditor/ckeditor5-engine/src/dataprocessor/htmldataprocessor';
@@ -65,13 +64,8 @@ export default class Clipboard extends Plugin {
 
 		this.listenTo( viewDocument, 'clipboardInput', ( evt, data ) => {
 			const dataTransfer = data.dataTransfer;
-			let content = '';
 
-			if ( dataTransfer.getData( 'text/html' ) ) {
-				content = normalizeClipboardHtml( dataTransfer.getData( 'text/html' ) );
-			} else if ( dataTransfer.getData( 'text/plain' ) ) {
-				content = plainTextToHtml( dataTransfer.getData( 'text/plain' ) );
-			}
+			let content = plainTextToHtml( dataTransfer.getData( 'text/plain' ) );
 
 			content = this._htmlDataProcessor.toView( content );
 
